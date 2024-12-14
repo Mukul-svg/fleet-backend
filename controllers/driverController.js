@@ -1,5 +1,6 @@
 const Driver = require('../models/Driver');
 const User = require('../models/User');
+const Cargo = require('../models/Cargo');
 
 exports.getTotalDrivers = async (req, res) => {
   try {
@@ -44,7 +45,7 @@ exports.createDriver = async (req, res) => {
 
 exports.updateDriverRating = async (req, res) => {
   try {
-    const { driverId } = req.params;
+    const { driverId } = req.user._id;
     const { rating } = req.body;
 
     const driver = await Driver.findByIdAndUpdate(
@@ -86,5 +87,20 @@ exports.getAllDrivers = async (req, res) => {
     res.json(drivers);
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving drivers', error: error.message });
+  }
+};
+
+exports.getAssignedCargo = async (req, res) => {
+  try {
+    const driver = await Driver.findOne({ user: req.user.id });
+    if (!driver) {
+      return res.status(404).json({ message: 'Driver not found' });
+    }
+
+    const assignedCargo = await Cargo.find({ driver: driver._id });
+
+    res.json(assignedCargo);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving assigned cargo', error: error.message });
   }
 };

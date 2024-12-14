@@ -16,6 +16,12 @@ router.get('/',
   driverController.getAllDrivers
 );
 
+router.get('/assigned-cargo',
+  authMiddleware,
+  roleMiddleware(['Driver']),
+  driverController.getAssignedCargo
+);
+
 router.patch('/:driverId/rating', 
   authMiddleware, 
   roleMiddleware(['Admin', 'FleetManager']), 
