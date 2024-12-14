@@ -16,7 +16,6 @@ const CargoSchema = new mongoose.Schema({
   },
   type: { 
     type: String, 
-    enum: ['Fragile', 'Hazardous', 'Standard', 'Refrigerated'], 
     default: 'Standard' 
   },
   destination: { 
